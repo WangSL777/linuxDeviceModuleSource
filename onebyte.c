@@ -39,12 +39,43 @@ int onebyte_release(struct inode *inode, struct file *filep)
 
 ssize_t onebyte_read(struct file *filep, char *buf, size_t count, loff_t *f_pos)
 {
-	/*please complete the function on your own*/
+/*
+	int readCnt = 0;
+	while(count>0 && readCnt < (sizeof(onebyte_data)/sizeof(char)) && onebyte_data[readCnt] != 0 )
+	{
+		put_user(onebyte_data[readCnt], buf++);
+		readCnt++;
+		count--;
+	}
+	return readCnt;
+*/
+
+	if((*f_pos) > 0)
+		return 0; //end of file
+
+	put_user(onebyte_data[0], buf);
+//	put_user(0, &buf[1]);
+//	int cnt = copy_to_user(buf, onebyte_data, 1);
+	(*f_pos) ++;
+	return 1;
 }
 
 ssize_t onebyte_write(struct file *filep, const char *buf, size_t count, loff_t *f_pos)
 {
-	/*please complete the function on your own*/
+/*
+	kfree(onebyte_data);
+	int writeCnt = 0;
+	memset(onebyte_data, 0 , sizeof(onebyte_data)/sizeof(char));
+	while(count>0 && buf[writeCnt] != 0)
+	{	
+		onebyte_data[writeCnt] = buf[writeCnt];
+		count--;
+		writeCnt++;
+	}
+	return writeCnt;
+*/
+	onebyte_data[0] = buf[0];
+	return 1;
 }
 
 static int onebyte_init(void)
